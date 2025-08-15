@@ -7,7 +7,7 @@
   - When you select an article (using the up and down arrows and the enter key) you will either be taken straight to **w3m** or your **web browser** (like firefox or chromium).
 
  ### Installation
-> Clone this repo where you want 
+> Clone this repo where you want, make it some place important so you don't delete the directory by accident. 
 >
 > Run the command: ```makepkg```
 >
