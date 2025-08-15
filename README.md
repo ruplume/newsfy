@@ -1,4 +1,5 @@
 # newsfy
+###### WARNING: INSTALL SCRIPT ONLY WORKS WITH FISH AND NOT BASH OR ZSH, MANUAL INTERVENTION IS REQUIRED FOR UNSUPPORTED SHELLS.
  #### newsfy is a tty / terminal based news reader which allows you to read the latest arch linux news feed right in your terminal!
 
  ### What newsfy can do
