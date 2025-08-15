@@ -1,0 +1,8 @@
+post(){
+	echo "newsfy has been installed."
+	echo "Run 'newsfy' to view the most recent Arch Linux news!"
+}
+
+post_upgrade() {
+	post_install
+}
