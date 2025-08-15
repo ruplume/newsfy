@@ -1,0 +1,106 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <curl/curl.h>
+#include <ncurses.h>
+#include <cstdlib>
+
+struct Article {
+    std::string title;
+    std::string link;
+    std::string pubDate;
+};
+
+static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp) {
+    ((std::string*)userp)->append((char*)contents, size * nmemb);
+    return size * nmemb;
+}
+
+std::string fetch_feed(const std::string &url) {
+    CURL *curl;
+    std::string readBuffer;
+
+    curl_global_init(CURL_GLOBAL_DEFAULT);
+    curl = curl_easy_init();
+    if (curl) {
+        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+        curl_easy_setopt(curl, CURLOPT_USERAGENT, "Mozilla/5.0");
+        curl_easy_perform(curl);
+        curl_easy_cleanup(curl);
+    }
+    curl_global_cleanup();
+    return readBuffer;
+}
+
+std::vector<Article> parse_rss(const std::string &xml) {
+    std::vector<Article> articles;
+    size_t pos = 0;
+
+    while ((pos = xml.find("<item>", pos)) != std::string::npos) {
+        size_t endItem = xml.find("</item>", pos);
+        if (endItem == std::string::npos) break;
+
+        size_t titleStart = xml.find("<title>", pos);
+        size_t titleEnd   = xml.find("</title>", titleStart);
+        size_t linkStart  = xml.find("<link>", pos);
+        size_t linkEnd    = xml.find("</link>", linkStart);
+        size_t dateStart  = xml.find("<pubDate>", pos);
+        size_t dateEnd    = xml.find("</pubDate>", dateStart);
+
+        if (titleStart != std::string::npos && linkStart != std::string::npos && dateStart != std::string::npos) {
+            Article a;
+            a.title = xml.substr(titleStart + 7, titleEnd - (titleStart + 7));
+            a.link  = xml.substr(linkStart + 6, linkEnd - (linkStart + 6));
+            a.pubDate = xml.substr(dateStart + 9, dateEnd - (dateStart + 9));
+            articles.push_back(a);
+        }
+
+        pos = endItem;
+    }
+    return articles;
+}
+
+void run_tui(const std::vector<Article> &articles) {
+    initscr();
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
+
+    int choice = 0;
+    int displayCount = std::min((int)articles.size(), 5); // only show 5 most recent
+
+    while (true) {
+        clear();
+        for (int i = 0; i < displayCount; i++) {
+            if (i == choice) attron(A_REVERSE);
+            mvprintw(i, 0, "[%s] %s", articles[i].pubDate.c_str(), articles[i].title.c_str());
+            if (i == choice) attroff(A_REVERSE);
+        }
+        refresh();
+
+        int ch = getch();
+        if (ch == KEY_UP) {
+            if (choice > 0) choice--;
+        } else if (ch == KEY_DOWN) {
+            if (choice < displayCount - 1) choice++;
+        } else if (ch == '\n') {
+            endwin();
+            std::string cmd = "xdg-open \"" + articles[choice].link + "\"";
+            system(cmd.c_str());
+            return;
+        } else if (ch == 'q') {
+            break;
+        }
+    }
+    endwin();
+}
+
+int main() {
+    std::string feed = fetch_feed("https://archlinux.org/feeds/news/");
+    auto articles = parse_rss(feed);
+    run_tui(articles);
+    return 0;
+}
+
