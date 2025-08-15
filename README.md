@@ -7,6 +7,8 @@
   - When you select an article (using the up and down arrows and the enter key) you will either be taken straight to **w3m** or your **web browser** (like firefox or chromium).
 
  ### Installation
+> Clone this repo where you want 
+>
 > Run the command: ```makepkg```
 >
 > Then run `sudo pacman -U newsfy-git-debug-r8.9031e02-1-x86_64.pkg.tar.zst`
