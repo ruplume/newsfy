@@ -1,4 +1,5 @@
 # newsfy
+###### WARNING: INSTALL SCRIPT ONLY WORKS WITH FISH AND NOT BASH OR ZSH, MANUAL INTERVENTION IS REQUIRED FOR UNSUPPORTED SHELLS.
  #### newsfy is a tty / terminal based news reader which allows you to read the latest arch linux news feed right in your terminal!
 
  ### What newsfy can do
@@ -6,12 +7,14 @@
   - When you select an article (using the up and down arrows and the enter key) you will either be taken straight to **w3m** or your **web browser** (like firefox or chromium).
 
  ### Installation
-  - Download the bash script   `newsfy_install.sh` 
-  - Modify if into an executable
-      `chmod +x newsfy_install.sh`
-  - Run the script after modifying it.
-    `./newsfy_install.sh`
-And you're done! Restart the fish shell or simply just type in the command "fish" and you should see how to run it!
+> Clone this repo where you want, make it some place important so you don't delete the directory by accident. 
+>
+> Run the command: ```makepkg```
+>
+> Then run `sudo pacman -U newsfy-git-debug-r8.9031e02-1-x86_64.pkg.tar.zst`
+> 
+> And you're done!
+###### make sure you set fish as your default shell!
 
 [comment]: ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣶⣿⣷⣶⣶⣦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 [comment]:⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣿⣿⣿⣿⣿⣿⣿⣷⣤⣤⣴⣶⣶⣶⣶⣶⣶⣶⣶⣶⣦⣤⣤⣀⡀⠀⠀⠀⠀⠀⠀⢀⣀⣀⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
